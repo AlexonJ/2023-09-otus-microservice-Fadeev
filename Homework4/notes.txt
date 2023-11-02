@@ -1,0 +1,12 @@
+to add metrics into your application:
+1. Add prometheus into your application using artefacts
+2. install prometheus into kubernetes (https://artifacthub.io/packages/helm/prometheus-community/kube-prometheus-stack)
+3. After installation find "prometheus-kube-prometheus-prometheus" service in kubernetes and get his IP address and port
+4. Add port name to the service with our application
+5. Create service-monitor: https://github.com/evgnep/msa/blob/master/prometheus/service-monitor.yaml
+6. go to the http://10.104.169.150:9090/ and check that it is available
+7. go to the http://10.104.169.150:9090/targets?search= and check, that endpoint with service exist:
+    http://10.244.1.148:8000/actuator/prometheus
+8. go to grafana and add dashboard with metric:
+    histogram_quantile(0.95, sum by(le, uri) (rate(http_server_requests_seconds_bucket{uri=~"/user.*"}[1m])))
+    histogram_quantile(0.50, sum by(le, uri) (http_server_requests_seconds_sum{uri=~"/user.*"} / http_server_requests_seconds_count{uri=~"/user.*"}))

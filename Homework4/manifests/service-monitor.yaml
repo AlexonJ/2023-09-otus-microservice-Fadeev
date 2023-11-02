@@ -1,0 +1,23 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+
+metadata:
+  name: user-crud-service-app-monitor
+  namespace: user-crud-app-ns
+  labels:
+    app: user-crud-service-app-monitor
+
+spec:
+  endpoints:
+    - port: user-crud-metrics-port
+      scrapeTimeout: 30s
+      path: /actuator/prometheus
+      honorLabels: true
+      scheme: http
+  #  jobLabel: stack
+  namespaceSelector:
+    matchNames:
+      - user-crud-app-ns
+  selector:
+    matchLabels:
+      app: user-crud-service

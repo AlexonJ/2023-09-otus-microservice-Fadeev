@@ -1,0 +1,14 @@
+1. Request duration
+Use histogram_quantile() function to calculate the 99th percentile of the http server request duration:
+histogram_quantile(0.99, rate(http_server_requests_seconds_bucket{uri!~"/actuator/health.+"}[1m]))
+histogram_quantile(0.90, sum by(le) (rate(http_server_requests_seconds_bucket{uri!~"/actuator.*"}[1m])))
+
+2. RPS request per second
+    sum(rate(http_server_requests_seconds_bucket{uri!~"/actuator.+"}[1m]))/60
+http_server_requests_seconds_sum / http_server_requests_seconds_count
+
+
+
+Метрика http_server_requests_seconds_sum в Prometheus содержит суммарное значение времени выполнения HTTP-запросов в течение определенного времени. Она представляет собой накопленное общее время выполнения всех HTTP-запросов, которые соответствуют вашему запросу.
+Каждая точка данных в метрике http_server_requests_seconds_sum представляет общее время выполнения всех запросов, которые соответствуют данной метрике, и она увеличивается с каждым выполненным запросом. Эта метрика может быть полезна для анализа общей нагрузки и времени выполнения ваших HTTP-запросов в приложении.
+Обычно http_server_requests_seconds_sum используется в сочетании с метрикой http_server_requests_seconds_count, чтобы рассчитать среднее время выполнения запроса или другие агрегированные статистики.

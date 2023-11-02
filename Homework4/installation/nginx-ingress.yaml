@@ -1,0 +1,28 @@
+controller:
+  kind: DaemonSet
+  
+  reportNodeInternalIp: true
+
+  hostPort:
+    enabled: true
+    ports:
+      http: 80
+      https: 443
+
+  service:
+    type: NodePort
+
+# for homework 4
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+      scrapeInterval: 15s
+#      namespace: user-crud-app-ns
+      namespaceSelector:
+          any: true
+      additionalLabels:
+        release: prometheus
+  podAnnotations:
+    prometheus.io/port: "10254"
+    prometheus.io/scrape: "true"
